@@ -1,0 +1,23 @@
+{
+    "missing_values": {
+        "period": 0,
+        "respondent": 0,
+        "respondent-name": 0,
+        "type": 0,
+        "type-name": 0,
+        "timezone": 0,
+        "energy_demand_MW": 0,
+        "value-units": 0,
+        "period_dt": 0,
+        "date": 0,
+        "city": 0
+    },
+    "outliers": {
+        "energy_demand_MW": 0
+    },
+    "freshness": {
+        "latest_date": "2025-07-06 00:00:00",
+        "days_ago": 0,
+        "is_fresh": true
+    }
+}
