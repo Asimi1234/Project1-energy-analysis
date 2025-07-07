@@ -8,7 +8,9 @@ from src.visualizations import (
     map_visualization,
     dual_axis_time_series,
     correlation_plot,
-    heatmap_usage_pattern
+    heatmap_usage_pattern,
+    seasonal_demand_trend,          # ✅ NEW
+    regional_correlation_bar        # ✅ NEW
 )
 
 # --- Page Config ---
@@ -109,7 +111,6 @@ st.title("Energy Demand & Weather Correlation Dashboard")
 
 energy_df, energy_report = load_data("energy")
 weather_df, weather_report = load_data("weather")
-
 merged_df = load_merged_data()
 
 DEBUG = False
@@ -117,13 +118,8 @@ DEBUG = False
 if DEBUG and merged_df is not None:
     st.write("✅ Loaded merged data with shape:", merged_df.shape)
     st.write("🧪 Columns:", merged_df.columns.tolist())
-
-    missing_timezone = merged_df["timezone"].isna().sum()
-    missing_date = merged_df["date"].isna().sum()
-
-    st.write(f"Missing timezones: {missing_timezone}")
-    st.write(f"Missing or invalid dates: {missing_date}")
-    
+    st.write(f"Missing timezones: {merged_df['timezone'].isna().sum()}")
+    st.write(f"Missing or invalid dates: {merged_df['date'].isna().sum()}")
     st.dataframe(merged_df.head())
 
 if merged_df is not None:
@@ -163,7 +159,6 @@ with tab1:
         st.error("❌ Data is missing critical columns like `city` or valid dates.")
         st.stop()
 
-    # -- Sidebar Filters --
     merged_df["city"] = merged_df["city"].astype(str)
     cities = sorted(merged_df["city"].dropna().unique().tolist())
     selected_cities = st.sidebar.multiselect("Select Cities", cities, default=cities)
@@ -198,7 +193,6 @@ with tab1:
         st.warning("⚠️ No data available for the selected filters.")
         st.stop()
 
-    # Show latest data date
     latest_update = merged_df["date"].max()
     if pd.notna(latest_update):
         st.info(f"📅 Latest Data: {latest_update.date()}")
@@ -216,13 +210,20 @@ with tab1:
             loc_df = filtered_df[filtered_df["city"] == loc]
             st.plotly_chart(dual_axis_time_series(loc_df, loc), use_container_width=True)
 
+        st.subheader("📈 Correlation Plot (Pearson R)")
         st.plotly_chart(correlation_plot(filtered_df), use_container_width=True)
 
+        st.subheader("📊 Regional Pearson R Comparison")
+        st.plotly_chart(regional_correlation_bar(filtered_df), use_container_width=True)
+
+        st.subheader("📊 Seasonal Energy Demand Trend")
+        st.plotly_chart(seasonal_demand_trend(filtered_df), use_container_width=True)
+
         if "energy_demand_MW" in filtered_df.columns:
+            st.subheader("📊 Energy Usage Pattern Heatmap")
             st.plotly_chart(heatmap_usage_pattern(filtered_df), use_container_width=True)
         else:
             st.warning("⚠️ Missing `energy_demand_MW`. Skipping heatmap.")
-
 
 with tab2:
     st.subheader("📉 Energy Data Report")

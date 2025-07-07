@@ -45,19 +45,25 @@ to ensure reliable data for analysis.
 The Streamlit dashboard includes:
 - 🗺️ **Geographic Map:** Avg. demand (size) & avg. temperature (color)
 - 📊 **Time Series:** Daily temp vs. energy demand (dual-axis) with weekends highlighted
-- 📈 **Correlation Scatter:** Temp vs. demand with regression line & R² value
-- 🔥 **Heatmap:** Energy demand by temperature band and day of week  
+- 📈 **Correlation Scatter:** Temp vs. demand with regression line and **Pearson R value**
+- 🔍 **Per-City Correlation Panel:** R values for each city, categorized as **strong**, **moderate**, or **weak**
+- 🔥 **Heatmap:** Energy demand by temperature band and day of week
+
+I also added:
+- 📊 **Regional Correlation Insights:** to highlight how cities like **Phoenix** exhibit strong weather-demand coupling while **Seattle** shows virtually none.
+- 📅 **Seasonal Patterns Visuals:** that reveal consistent demand peaks in summer and dips in winter across most regions.
 
 ---
 
 ## 🎙️ 2:00–2:30 — Results & Insights
 
 From this analysis:
-- Confirmed a **strong correlation (R² ≥ 0.7)** between temperature extremes and energy demand
+- Confirmed a **strong correlation (R ≥ 0.7)** between temperature extremes and energy demand in most cities.
 - Identified **weekday vs. weekend consumption patterns**
-- Noted unique regional differences across cities like **Phoenix** and **Seattle**
+- Highlighted **unique regional differences** — for example, **Phoenix** showed an R of **0.927**, while **Seattle** had an R of **-0.049**
+- Detected **seasonal energy usage patterns**, with demand typically peaking in **summer months**.
 
-These insights help energy providers **optimize generation planning and demand response** strategies.
+These insights help energy providers **optimize generation planning and demand response** strategies based on both **regional characteristics** and **seasonal cycles**.
 
 ---
 
@@ -67,12 +73,17 @@ Throughout this project, I used **ChatGPT 4o** and **GitHub Copilot** for:
 - API integration
 - Data visualization debugging
 - Environment setup and dependency troubleshooting
+- Refining correlation analysis logic and dashboard messaging
 
 ### Example AI mistake:
 - AI suggested a wrong NOAA API parameter — I fixed this by verifying against the official API docs.  
 **Lesson:** Always cross-validate AI-generated code against documentation.
 
-**Time saved:** ~**9 hours** through AI-assisted troubleshooting and development.
+Another issue:  
+- AI originally computed **R² globally**, which masked meaningful trends across cities. I switched to **Pearson R** and added per-city breakdowns for actionable insight.  
+**Lesson:** Always validate whether aggregated metrics accurately reflect localized realities.
+
+**Time saved:** ~**9 hours** through AI-assisted troubleshooting, analysis refinement, and dashboard development.
 
 If I repeated this project, I'd implement **data schema validation earlier** to proactively manage schema inconsistencies.
 
@@ -80,4 +91,3 @@ If I repeated this project, I'd implement **data schema validation earlier** to 
 
 ## 📌 Close:
 Thank you for watching — you’ll find my full project repo and AI usage documentation linked in the description.
-

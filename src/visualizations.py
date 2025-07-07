@@ -2,6 +2,9 @@ import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
 import streamlit as st
+import statsmodels.api as sm
+from scipy.stats import pearsonr
+import numpy as np
 
 
 def map_visualization(df):
@@ -59,7 +62,6 @@ def dual_axis_time_series(df, location):
 
     fig = go.Figure()
 
-    # Shade weekends
     df_weekends = df[df['date'].dt.dayofweek >= 5]
     for i in range(len(df_weekends)):
         fig.add_vrect(
@@ -70,7 +72,6 @@ def dual_axis_time_series(df, location):
             line_width=0
         )
 
-    # Add traces
     fig.add_trace(go.Scatter(x=df["date"], y=df["temp_avg"], mode='lines', name='Temperature (°F)'))
     fig.add_trace(go.Scatter(x=df["date"], y=df["energy_demand_MW"], mode='lines',
                              name='Energy Demand (MW)', yaxis='y2', line=dict(dash='dot')))
@@ -98,53 +99,52 @@ def correlation_plot(df):
     if df_cleaned.empty:
         return px.scatter(title="No data available for correlation analysis.")
 
+    import numpy as np
+    from scipy.stats import pearsonr
+
+    # Compute per-city r values
+    st.subheader("📊 Per-City Pearson R Values")
+    city_rs = {}
+    for city in df_cleaned["city"].unique():
+        city_data = df_cleaned[df_cleaned["city"] == city]
+        if len(city_data) > 1:
+            r, _ = pearsonr(city_data["temp_avg"], city_data["energy_demand_MW"])
+            city_rs[city] = r
+            # Annotate per r value
+            if r >= 0.7:
+                st.success(f"{city}: {r:.3f} — ✅ Strong correlation")
+            elif r >= 0.4:
+                st.info(f"{city}: {r:.3f} — 📈 Moderate correlation")
+            else:
+                st.warning(f"{city}: {r:.3f} — 🔍 Weak correlation")
+        else:
+            st.warning(f"{city}: Not enough data for correlation.")
+
+    # Compute global Pearson r
+    if len(df_cleaned) > 1:
+        global_r, _ = pearsonr(df_cleaned["temp_avg"], df_cleaned["energy_demand_MW"])
+        if global_r >= 0.7:
+            st.success(f"🔍 Global Pearson R: {global_r:.3f} — ✅ Strong correlation")
+        elif global_r >= 0.4:
+            st.info(f"🔍 Global Pearson R: {global_r:.3f} — 📈 Moderate correlation")
+        else:
+            st.warning(f"🔍 Global Pearson R: {global_r:.3f} — 🔍 Weak correlation")
+    else:
+        st.warning("Not enough data for global correlation.")
+
+    # Scatter plot with trendline
     fig = px.scatter(
         df_cleaned, x="temp_avg", y="energy_demand_MW", color="city", hover_data=["date"],
         trendline="ols", trendline_color_override="black"
     )
 
-    results = px.get_trendline_results(fig)
-    r_squared = None
-
-    if not results.empty:
-        fit = results.iloc[0]["px_fit_results"]
-        r_squared = fit.rsquared
-        intercept = fit.params[0]
-        slope = fit.params[1]
-        equation = f"y = {slope:.2f}x + {intercept:.2f}"
-
-        # Add annotation inside the plot
-        fig.add_annotation(
-            xref="paper", yref="paper",
-            x=0.05, y=0.95,
-            text=f"{equation}, R²={r_squared:.3f}",
-            showarrow=False,
-            font=dict(size=12, color="black"),
-            bgcolor="rgba(255,255,255,0.7)"
-        )
-
-        # Streamlit info banner
-        if r_squared >= 0.7:
-            msg = "🌟 Strong correlation"
-        elif r_squared >= 0.4:
-            msg = "📈 Moderate correlation"
-        else:
-            msg = "🔍 Weak correlation"
-        st.success(f"R-squared: {r_squared:.3f} — {msg}")
-
-    else:
-        st.warning("No fit results available for this selection.")
-
-    title_text = "Temperature vs Energy Demand Correlation"
-    if r_squared is not None:
-        title_text += f" (R² = {r_squared:.3f})"
-
     fig.update_layout(
-        title=title_text,
+        title="Temperature vs Energy Demand Correlation (with OLS Trendline)",
         xaxis_title="Average Temperature (°F)",
         yaxis_title="Energy Demand (MW)"
     )
     return fig
+
 
 
 def heatmap_usage_pattern(df):
@@ -181,5 +181,61 @@ def heatmap_usage_pattern(df):
     fig.update_layout(
         title="Average Energy Demand (MW) by Temp Range and Day of Week",
         coloraxis_colorbar=dict(title="Demand (MW)")
+    )
+    return fig
+
+def seasonal_demand_trend(df):
+    df = df.copy()
+    if 'date' not in df.columns or 'energy_demand_MW' not in df.columns:
+        return go.Figure(layout={"title": "Seasonal trend unavailable — missing data."})
+
+    if not pd.api.types.is_datetime64_any_dtype(df['date']):
+        df['date'] = pd.to_datetime(df['date'], errors='coerce')
+
+    df['month'] = df['date'].dt.month_name()
+    month_order = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ]
+
+    monthly_avg = df.groupby('month')["energy_demand_MW"].mean().reindex(month_order)
+
+    fig = px.line(
+        x=monthly_avg.index,
+        y=monthly_avg.values,
+        labels={"x": "Month", "y": "Avg Energy Demand (MW)"},
+        markers=True,
+        title="Seasonal Energy Demand Pattern"
+    )
+    return fig
+
+def regional_correlation_bar(df):
+    df_cleaned = df.dropna(subset=["temp_avg", "energy_demand_MW", "city"])
+    if df_cleaned.empty:
+        return go.Figure(layout={"title": "No data available for regional correlation analysis."})
+
+    corrs = []
+    for city in df_cleaned["city"].unique():
+        city_df = df_cleaned[df_cleaned["city"] == city]
+        if len(city_df) > 1:
+            r, _ = pearsonr(city_df["temp_avg"], city_df["energy_demand_MW"])
+            corrs.append({"city": city, "r_value": r})
+
+    corr_df = pd.DataFrame(corrs).sort_values(by="r_value", ascending=False)
+
+    fig = px.bar(
+        corr_df,
+        x="city",
+        y="r_value",
+        color="r_value",
+        color_continuous_scale="Bluered",
+        text="r_value",
+        title="Per-City Pearson R Correlation (Temp vs Demand)"
+    )
+    fig.update_traces(texttemplate='%{text:.3f}', textposition='outside')
+    fig.update_layout(
+        yaxis_title="Pearson R",
+        coloraxis_colorbar=dict(title="R Value"),
+        uniformtext_minsize=8, uniformtext_mode='hide'
     )
     return fig
