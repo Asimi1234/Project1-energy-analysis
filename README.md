@@ -16,10 +16,10 @@ Accurate energy demand forecasting is critical for minimizing costs, managing pe
 - **Production-Ready Structure** - Clean repo layout, config files, logging, error handling, and testability
 
 ### Dashboard Features
-1. **City-level Geographic Overview** - Interactive maps and location-based insights
-2. **Time Series Analysis** - Temperature vs energy demand correlation over time
-3. **Correlation Analysis** - Statistical relationships between weather variables and energy consumption
-4. **Usage Pattern Heatmaps** - Visual representation of consumption patterns by day/hour
+1. **City-level Geographic Overview** — Interactive maps and location-based insights
+2. **Time Series Analysis** — Temperature vs energy demand correlation over time, with weekends highlighted
+3. **Correlation Analysis** — Pearson R correlation between weather variables and energy consumption, both globally and per city
+4. **Usage Pattern Heatmaps** — Visual representation of energy demand by temperature band and day of week
 
 ### Technical Features
 - **AI Usage Documentation** - Transparent record of all AI-assisted decisions and code generation
@@ -48,6 +48,9 @@ Accurate energy demand forecasting is critical for minimizing costs, managing pe
 ### Temperature-Demand Correlation
 Energy demand rises sharply with temperature extremes (both heating and cooling), creating clear correlation patterns visible in time series and statistical analysis.
 
+- Confirmed a **strong correlation (R ≥ 0.7)** between temperature extremes and energy demand for multiple cities.
+- Computed **global and per-city Pearson R values** to quantify and compare relationship strength.
+
 ### Seasonal Patterns
 - **Summer Peaks**: High cooling demand during hot months
 - **Winter Surges**: Increased heating requirements in cold periods
@@ -59,7 +62,11 @@ Energy demand rises sharply with temperature extremes (both heating and cooling)
 - **Holiday Effects**: Reduced consumption during major holidays
 
 ### Regional Variations
-Each city demonstrates unique energy-weather response profiles, enabling location-specific forecasting models and targeted grid management strategies.
+Each city demonstrates unique energy-weather response profiles, confirmed by:
+- **Distinct per-city Pearson R correlation values**
+- **Geographic visualizations and heatmaps** highlighting location-specific demand trends
+
+This enables location-specific forecasting models and targeted grid management strategies.
 
 ## Data Quality Framework
 
@@ -131,7 +138,7 @@ poetry run streamlit run dashboards/app.py
 
 #### 4. Run Tests
 ```bash
-poetry run pytest tests/
+poetry run pytest -v tests/
 ```
 
 ## Dashboard Preview

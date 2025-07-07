@@ -71,6 +71,7 @@ def load_merged_data():
             st.warning(f"Failed to load merged file: {e}")
     return None
 
+
 def display_quality_report(report):
     if not report:
         st.warning("No quality report found.")
@@ -85,6 +86,16 @@ def display_quality_report(report):
     )
 
     col1, col2 = st.columns(2)
+    
+    def recursive_sum(d):
+        total = 0
+        for v in d.values():
+            if isinstance(v, dict):
+                total += recursive_sum(v)
+            elif isinstance(v, (int, float)):
+                total += v
+            # else ignore or handle other types if needed
+        return total
 
     with col1:
         st.subheader("Missing Values")
@@ -99,7 +110,7 @@ def display_quality_report(report):
     with col2:
         st.subheader("Outlier Detection")
         outliers = report.get("outliers", {})
-        total_outliers = sum(outliers.values())
+        total_outliers = recursive_sum(outliers)
         if total_outliers == 0:
             st.success("✅ No outliers.")
         else:
@@ -132,7 +143,7 @@ else:
                 energy_df,
                 weather_df,
                 on=["date", "city", "timezone"],
-                how="inner"
+                how="left"
             )
             if DEBUG:
                 st.info("Merged energy + weather data.")
@@ -199,8 +210,28 @@ with tab1:
 
     st.header("🗺️ Geographic Overview")
     st.plotly_chart(map_visualization(filtered_df), use_container_width=True)
+    # Compute quartiles for demand thresholds dynamically
 
-    st.header("🔬 Detailed Analysis")
+    if "demand_today" in filtered_df.columns:
+        q1 = filtered_df["demand_today"].quantile(0.25)
+        q3 = filtered_df["demand_today"].quantile(0.75)
+    elif "energy_demand_MW" in filtered_df.columns:
+        q1 = filtered_df["energy_demand_MW"].quantile(0.25)
+        q3 = filtered_df["energy_demand_MW"].quantile(0.75)
+    else:
+        q1, q3 = 40, 79  # fallback values if none found
+
+    caption_text = (
+        f"🟢 Green: Low demand (< {q1:.1f} MW) &nbsp;&nbsp;"
+        f"🟠 Orange: Moderate demand ({q1:.1f} - {q3:.1f} MW) &nbsp;&nbsp;"
+        f"🔴 Red: High demand (≥ {q3:.1f} MW) &nbsp;&nbsp;"
+        f"⚪ Gray: No data available for today."
+    )
+
+    st.caption(caption_text)
+
+
+    st.header("Detailed Analysis")
 
     if "temp_avg" not in filtered_df.columns:
         st.warning("⚠️ Missing `temp_avg` column. Skipping temperature visualizations.")
@@ -209,6 +240,8 @@ with tab1:
             st.subheader(f"📊 {loc} - Time Series")
             loc_df = filtered_df[filtered_df["city"] == loc]
             st.plotly_chart(dual_axis_time_series(loc_df, loc), use_container_width=True)
+            
+            st.caption("🔴 Light red shaded regions indicate weekends.")
 
         st.subheader("📈 Correlation Plot (Pearson R)")
         st.plotly_chart(correlation_plot(filtered_df), use_container_width=True)

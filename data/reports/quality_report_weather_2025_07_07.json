@@ -1,0 +1,30 @@
+{
+    "missing_values": {
+        "date": 0,
+        "precipitation": 0,
+        "temp_max_F": 0,
+        "temp_min_F": 0,
+        "city": 0,
+        "timezone": 0,
+        "temp_avg": 0
+    },
+    "outliers": {
+        "temp_max_F": {
+            "iqr": 1,
+            "rule_based": 0
+        },
+        "temp_min_F": {
+            "iqr": 0,
+            "rule_based": 0
+        },
+        "temp_avg": {
+            "iqr": 0,
+            "rule_based": 0
+        }
+    },
+    "freshness": {
+        "latest_date": "2025-07-04 00:00:00",
+        "days_ago": 3,
+        "is_fresh": true
+    }
+}

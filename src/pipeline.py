@@ -197,7 +197,32 @@ if weather_dfs:
             iqr = q3 - q1
             lower = q1 - 1.5 * iqr
             upper = q3 + 1.5 * iqr
-            outliers[col] = int(((weather_df[col] < lower) | (weather_df[col] > upper)).sum())
+    
+            # IQR-based outliers
+            iqr_mask = (weather_df[col] < lower) | (weather_df[col] > upper)
+            iqr_count = int(iqr_mask.sum())
+    
+            # Rule-based outliers
+            rule_mask = (weather_df[col] > 130) | (weather_df[col] < -50)
+            rule_count = int(rule_mask.sum())
+    
+            # Store both in nested dict
+            outliers[col] = {
+                "iqr": iqr_count,
+                "rule_based": rule_count
+            }
+    
+            # --- Debug output
+            print(f"[DEBUG] Outliers in '{col}': IQR={iqr_count}, Rule-based={rule_count}")
+            print(f"[DEBUG] IQR bounds for '{col}': lower={lower}, upper={upper}")
+    
+            if iqr_count > 0:
+                print(f"[DEBUG] IQR Outlier rows in '{col}':")
+                print(weather_df[iqr_mask][['date', 'city', col]])
+    
+            if rule_count > 0:
+                print(f"[DEBUG] Rule-based Outlier rows in '{col}':")
+                print(weather_df[rule_mask][['date', 'city', col]])
 
     try:
         latest_date = weather_df["date"].max()
@@ -231,24 +256,47 @@ if not energy_df.empty and not weather_df.empty:
         merge_cols = ["date", "city"]
         print(f"Merging dataframes on columns: {merge_cols}")
 
+        # Ensure consistent date formats
         energy_df["date"] = pd.to_datetime(energy_df["date"]).dt.date
         weather_df["date"] = pd.to_datetime(weather_df["date"]).dt.date
 
-        merged_df = pd.merge(energy_df, weather_df, on=merge_cols, how="inner")
+        # Merge while keeping all energy rows
+        merged_df = pd.merge(energy_df, weather_df, on=merge_cols, how="left")
 
-        print(f"Number of common merge keys: {len(merged_df)}")
+        print(f"Number of merged rows: {len(merged_df)}")
         print(f"Columns in merged_df: {merged_df.columns.tolist()}")
 
+        # Handle timezone column conflict if present
         if "timezone_y" in merged_df.columns:
             merged_df.drop(columns=["timezone_x"], inplace=True)
             merged_df.rename(columns={"timezone_y": "timezone"}, inplace=True)
 
+        # Ensure weather-related columns exist
+        weather_columns = ["precipitation", "temp_max_F", "temp_min_F", "timezone"]
+        for col in weather_columns:
+            if col not in merged_df.columns:
+                merged_df[col] = pd.NA
+
+        # Ensure weather columns are numeric
+        for col in ["temp_max_F", "temp_min_F", "precipitation"]:
+            merged_df[col] = pd.to_numeric(merged_df[col], errors='coerce')
+        
+        # Compute temperature average
+        merged_df["temp_avg"] = merged_df[["temp_max_F", "temp_min_F"]].mean(axis=1)
+        
+        # Mark rows with valid weather
+        merged_df["weather_available"] = merged_df["temp_avg"].notna()
+
+
+        # Add lat/lon from static city coordinates
         merged_df["lat"] = merged_df["city"].map(lambda c: CITY_COORDS_MAP.get(c, {}).get("lat"))
         merged_df["lon"] = merged_df["city"].map(lambda c: CITY_COORDS_MAP.get(c, {}).get("lon"))
 
+        # Save merged data
         merged_file = processed_data_path / f"processed_merged_data_{today_str}.csv"
         merged_df.to_csv(merged_file, index=False)
         print(f"Merged data saved to {merged_file}")
+
     except Exception as e:
         print(f"Failed to merge energy and weather data: {e}")
 else:

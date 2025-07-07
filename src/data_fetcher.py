@@ -33,15 +33,17 @@ if not NOAA_API_KEY or not EIA_API_KEY:
 # Fetch weather data
 def fetch_weather_data(station_id, start_date, end_date):
     url = "https://www.ncei.noaa.gov/cdo-web/api/v2/data"
-    params = {
-        'datasetid': 'GHCND',
-        'stationid': station_id,
-        'startdate': start_date,
-        'enddate': end_date,
-        'datatypeid': 'TMAX,TMIN,PRCP',
-        'units': 'standard',
-        'limit': 1000
-    }
+    params = [
+    ('datasetid', 'GHCND'),
+    ('stationid', station_id),
+    ('startdate', start_date),
+    ('enddate', end_date),
+    ('datatypeid', 'TMAX'),
+    ('datatypeid', 'TMIN'),
+    ('datatypeid', 'PRCP'),
+    ('units', 'standard'),
+    ('limit', 1000)
+    ]
     headers = {'token': NOAA_API_KEY}
 
     try:

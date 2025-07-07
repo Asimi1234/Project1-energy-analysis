@@ -12,39 +12,104 @@ def map_visualization(df):
     if "city" not in df_copy.columns:
         return go.Figure(layout={"title": "Missing 'city' column in data."})
 
-    required_cols = {'city', 'lat', 'lon', 'temp_avg', 'energy_demand_MW'}
+    required_cols = {'city', 'lat', 'lon', 'temp_avg', 'energy_demand_MW', 'date'}
     if df_copy.empty or not required_cols.issubset(df_copy.columns):
         fig = go.Figure(go.Scattermapbox())
         fig.update_layout(mapbox_style="open-street-map", title="Geographic Overview (No data to display)")
         return fig
 
-    map_summary = df_copy.groupby('city').agg(
+    latest_date = df_copy["date"].max().normalize()
+    yesterday_date = latest_date - pd.Timedelta(days=1)
+
+    # Get list of all unique cities with location info
+    cities_df = df_copy.groupby('city').agg(
         lat=('lat', 'first'),
-        lon=('lon', 'first'),
-        avg_temp=('temp_avg', 'mean'),
-        avg_demand=('energy_demand_MW', 'mean')
+        lon=('lon', 'first')
     ).reset_index()
 
-    fig = px.scatter_mapbox(
-        map_summary,
-        lat="lat",
-        lon="lon",
-        size="avg_demand",
-        color="avg_temp",
-        hover_name="city",
-        hover_data={"avg_temp": ":.1f °F", "avg_demand": ":.0f MW", "lat": False, "lon": False},
-        color_continuous_scale=px.colors.sequential.Plasma,
-        size_max=30,
-        zoom=3,
-        height=500,
-        title="Geographic Overview: Avg. Demand (Size) & Avg. Temp (Color)"
-    )
+    # Fetch latest demand/temp per city (if any)
+    latest_df = df_copy[df_copy["date"].dt.normalize() == latest_date]
+    summary_df = latest_df.groupby('city').agg(
+        temp=('temp_avg', 'mean'),
+        demand_today=('energy_demand_MW', 'mean')
+    ).reset_index()
+
+    # Merge cities to ensure all markers show up
+    summary_df = pd.merge(cities_df, summary_df, on='city', how='left')
+
+    # Yesterday's demand for % change
+    yesterday_df = df_copy[df_copy["date"].dt.normalize() == yesterday_date]
+    yesterday_summary = yesterday_df.groupby('city').agg(
+        demand_yesterday=('energy_demand_MW', 'mean')
+    ).reset_index()
+
+    summary_df = pd.merge(summary_df, yesterday_summary, on='city', how='left')
+
+    summary_df["pct_change"] = (
+        (summary_df["demand_today"] - summary_df["demand_yesterday"]) / summary_df["demand_yesterday"]
+    ) * 100
+
+    # Compute dynamic thresholds from the data
+    q1 = summary_df["demand_today"].quantile(0.25)
+    q3 = summary_df["demand_today"].quantile(0.75)
+    
+    # Optional debug logging
+    print(f"[DEBUG] Q1: {q1:.2f}, Q3: {q3:.2f}")
+    
+    def get_color(demand):
+        if pd.isna(demand):
+            return 'gray'
+        elif demand >= q3:
+            return 'red'
+        elif demand >= q1:
+            return 'orange'
+        else:
+            return 'green'
+    
+    summary_df["color"] = summary_df["demand_today"].apply(get_color)
+    
+    
+    fig = go.Figure()
+
+    for _, row in summary_df.iterrows():
+        hover_text = (
+            f"City: {row['city']}<br>"
+            f"Temp: {row['temp']:.1f}°F<br>" if not pd.isna(row["temp"]) else f"City: {row['city']}<br>Temp: N/A<br>"
+        )
+        if not pd.isna(row["demand_today"]):
+            hover_text += f"Today's Demand: {row['demand_today']:.0f} MW<br>"
+        else:
+            hover_text += "Today's Demand: N/A<br>"
+
+        if not pd.isna(row["pct_change"]):
+            hover_text += f"% Change from Yesterday: {row['pct_change']:.1f}%"
+        else:
+            hover_text += "No data for yesterday"
+
+        fig.add_trace(go.Scattermapbox(
+            lat=[row["lat"]],
+            lon=[row["lon"]],
+            mode="markers",
+            marker=go.scattermapbox.Marker(
+                size=20,
+                color=row["color"]
+            ),
+            text=hover_text,
+            hoverinfo="text",
+            name=row["city"]
+        ))
+
     fig.update_layout(
         mapbox_style="open-street-map",
-        margin={"r": 0, "t": 40, "l": 0, "b": 0},
-        coloraxis_colorbar=dict(title="Avg Temp (°F)")
+        mapbox=dict(
+            center=dict(lat=38, lon=-97),
+            zoom=3.5
+        ),
+        margin={"r":0,"t":40,"l":0,"b":0},
+        title=f"Geographic Overview (as of {latest_date.date()})"
     )
     return fig
+
 
 
 def dual_axis_time_series(df, location):
@@ -62,20 +127,34 @@ def dual_axis_time_series(df, location):
 
     fig = go.Figure()
 
+    # Identify weekends
     df_weekends = df[df['date'].dt.dayofweek >= 5]
+
+    # Add shaded vertical rectangles for weekends (enhanced visibility)
     for i in range(len(df_weekends)):
         fig.add_vrect(
             x0=df_weekends['date'].iloc[i] - pd.Timedelta(days=0.5),
             x1=df_weekends['date'].iloc[i] + pd.Timedelta(days=0.5),
-            fillcolor="rgba(200, 200, 200, 0.2)",
+            fillcolor="rgba(255, 200, 200, 0.3)",  # Light red tint for weekends
             layer="below",
             line_width=0
         )
 
-    fig.add_trace(go.Scatter(x=df["date"], y=df["temp_avg"], mode='lines', name='Temperature (°F)'))
-    fig.add_trace(go.Scatter(x=df["date"], y=df["energy_demand_MW"], mode='lines',
-                             name='Energy Demand (MW)', yaxis='y2', line=dict(dash='dot')))
+    # Add temperature line (left axis)
+    fig.add_trace(go.Scatter(
+        x=df["date"], y=df["temp_avg"],
+        mode='lines', name='Temperature (°F)'
+    ))
 
+    # Add energy demand line (right axis)
+    fig.add_trace(go.Scatter(
+        x=df["date"], y=df["energy_demand_MW"],
+        mode='lines', name='Energy Demand (MW)',
+        yaxis='y2',
+        line=dict(dash='dot')
+    ))
+
+    # Update layout with dual axes
     fig.update_layout(
         yaxis=dict(title="Temperature (°F)"),
         yaxis2=dict(title="Energy Demand (MW)", overlaying='y', side='right'),
@@ -83,7 +162,9 @@ def dual_axis_time_series(df, location):
         xaxis_title="Date",
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
     )
+
     return fig
+
 
 
 def correlation_plot(df):
@@ -98,9 +179,6 @@ def correlation_plot(df):
     df_cleaned = df.dropna(subset=['temp_avg', 'energy_demand_MW'])
     if df_cleaned.empty:
         return px.scatter(title="No data available for correlation analysis.")
-
-    import numpy as np
-    from scipy.stats import pearsonr
 
     # Compute per-city r values
     st.subheader("📊 Per-City Pearson R Values")
