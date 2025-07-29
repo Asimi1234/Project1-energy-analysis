@@ -1,0 +1,36 @@
+{
+  "dataset_info": {
+    "total_rows": 513,
+    "total_columns": 7,
+    "columns": [
+      "date",
+      "precipitation",
+      "temp_max_F",
+      "temp_min_F",
+      "city",
+      "timezone",
+      "temp_avg"
+    ]
+  },
+  "missing_values": {
+    "date": 0,
+    "precipitation": 0,
+    "temp_max_F": 0,
+    "temp_min_F": 0,
+    "city": 0,
+    "timezone": 0,
+    "temp_avg": 0
+  },
+  "outliers": {
+    "temp_min_F": 0,
+    "temp_max_F": 0,
+    "energy_demand_MW": "Column not found"
+  },
+  "freshness": {
+    "latest_date": "2025-07-26T00:00:00+00:00",
+    "days_ago": 3,
+    "is_fresh": false,
+    "total_records": 513,
+    "valid_dates": 513
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "dataset_info": {
+    "total_rows": 530,
+    "total_columns": 13,
+    "columns": [
+      "period",
+      "respondent",
+      "respondent-name",
+      "type",
+      "type-name",
+      "timezone",
+      "energy_demand_MW",
+      "value-units",
+      "city",
+      "period_dt",
+      "date",
+      "respondent_name",
+      "value"
+    ]
+  },
+  "missing_values": {
+    "period": 155,
+    "respondent": 0,
+    "respondent-name": 530,
+    "type": 0,
+    "type-name": 0,
+    "timezone": 0,
+    "energy_demand_MW": 375,
+    "value-units": 0,
+    "city": 0,
+    "period_dt": 155,
+    "date": 0,
+    "respondent_name": 0,
+    "value": 155
+  },
+  "outliers": {
+    "energy_demand_MW": 0
+  },
+  "freshness": {
+    "latest_date": "2025-07-29T00:00:00+00:00",
+    "days_ago": 0,
+    "is_fresh": true,
+    "total_records": 530,
+    "valid_dates": 530
+  }
+}

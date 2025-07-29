@@ -9,8 +9,8 @@ from src.visualizations import (
     dual_axis_time_series,
     correlation_plot,
     heatmap_usage_pattern,
-    seasonal_demand_trend,          # ✅ NEW
-    regional_correlation_bar        # ✅ NEW
+    seasonal_demand_trend,
+    regional_correlation_bar
 )
 
 # --- Page Config ---
@@ -28,11 +28,17 @@ def find_latest_file(directory, pattern):
 
 @st.cache_data
 def load_data(data_type):
+    data_dir = PROJECT_ROOT / "data/processed"
     pattern = f"processed_{data_type}_data_*.csv"
+    backup_file = data_dir / f"backup_{data_type}.csv"
     report_pattern = f"quality_report_{data_type}_*.json"
 
-    latest_data_file = find_latest_file(PROJECT_ROOT / "data/processed", pattern)
-    if latest_data_file is None:
+    latest_data_file = find_latest_file(data_dir, pattern)
+    if not latest_data_file and backup_file.exists():
+        st.warning(f"⚠️ Using backup_{data_type}.csv (no processed file found)")
+        latest_data_file = backup_file
+    elif not latest_data_file:
+        st.error(f"❌ No processed or backup file found for {data_type}.")
         return None, None
 
     try:
@@ -71,7 +77,6 @@ def load_merged_data():
             st.warning(f"Failed to load merged file: {e}")
     return None
 
-
 def display_quality_report(report):
     if not report:
         st.warning("No quality report found.")
@@ -86,7 +91,7 @@ def display_quality_report(report):
     )
 
     col1, col2 = st.columns(2)
-    
+
     def recursive_sum(d):
         total = 0
         for v in d.values():
@@ -94,7 +99,6 @@ def display_quality_report(report):
                 total += recursive_sum(v)
             elif isinstance(v, (int, float)):
                 total += v
-            # else ignore or handle other types if needed
         return total
 
     with col1:
@@ -210,7 +214,6 @@ with tab1:
 
     st.header("🗺️ Geographic Overview")
     st.plotly_chart(map_visualization(filtered_df), use_container_width=True)
-    # Compute quartiles for demand thresholds dynamically
 
     if "demand_today" in filtered_df.columns:
         q1 = filtered_df["demand_today"].quantile(0.25)
@@ -219,7 +222,7 @@ with tab1:
         q1 = filtered_df["energy_demand_MW"].quantile(0.25)
         q3 = filtered_df["energy_demand_MW"].quantile(0.75)
     else:
-        q1, q3 = 40, 79  # fallback values if none found
+        q1, q3 = 40, 79
 
     caption_text = (
         f"🟢 Green: Low demand (< {q1:.1f} MW) &nbsp;&nbsp;"
@@ -230,7 +233,6 @@ with tab1:
 
     st.caption(caption_text)
 
-
     st.header("Detailed Analysis")
 
     if "temp_avg" not in filtered_df.columns:
@@ -240,7 +242,6 @@ with tab1:
             st.subheader(f"📊 {loc} - Time Series")
             loc_df = filtered_df[filtered_df["city"] == loc]
             st.plotly_chart(dual_axis_time_series(loc_df, loc), use_container_width=True)
-            
             st.caption("🔴 Light red shaded regions indicate weekends.")
 
         st.subheader("📈 Correlation Plot (Pearson R)")

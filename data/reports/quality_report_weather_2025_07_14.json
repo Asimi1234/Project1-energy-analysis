@@ -10,7 +10,7 @@
     },
     "outliers": {
         "temp_max_F": {
-            "iqr": 1,
+            "iqr": 0,
             "rule_based": 0
         },
         "temp_min_F": {
@@ -23,7 +23,7 @@
         }
     },
     "freshness": {
-        "latest_date": "2025-07-04 00:00:00",
+        "latest_date": "2025-07-11 00:00:00",
         "days_ago": 3,
         "is_fresh": true
     }

@@ -101,7 +101,7 @@ Our automated validation system performs three critical checks after each data u
 1. **Clone the repository**
 ```bash
 git clone <repository-url>
-cd energy-forecasting
+cd project1-energy-analysis
 ```
 
 2. **Install dependencies**
@@ -161,6 +161,7 @@ PROJECT1-ENERGY-ANALYSIS/
 ├── dashboards/
 │   └── app.py
 ├── data/
+|   ├── backup/
 │   ├── processed/
 │   ├── raw/
 │   └── reports/
