@@ -1,0 +1,38 @@
+{
+  "dataset_info": {
+    "total_rows": 155,
+    "total_columns": 9,
+    "columns": [
+      "respondent",
+      "respondent_name",
+      "type",
+      "type-name",
+      "timezone",
+      "energy_demand_MW",
+      "value-units",
+      "city",
+      "date"
+    ]
+  },
+  "missing_values": {
+    "respondent": 0,
+    "respondent_name": 0,
+    "type": 0,
+    "type-name": 0,
+    "timezone": 0,
+    "energy_demand_MW": 0,
+    "value-units": 0,
+    "city": 0,
+    "date": 0
+  },
+  "outliers": {
+    "energy_demand_MW": "Column energy_demand_MW is not numeric"
+  },
+  "freshness": {
+    "latest_date": "2025-08-04T00:00:00+00:00",
+    "days_ago": 0,
+    "is_fresh": true,
+    "total_records": 155,
+    "valid_dates": 155
+  }
+}

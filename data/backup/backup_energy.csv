@@ -1,5 +1,11 @@
 respondent,respondent-name,type,type-name,timezone,timezone-description,energy_demand_MW,value-units,city,date
-NYIS,New York Independent System Operator,DF,Day-ahead demand forecast,Eastern,Eastern,596869,megawatthours,New York,2025-07-29
+NYIS,New York Independent System Operator,DF,Day-ahead demand forecast,Eastern,Eastern,472659,megawatthours,New York,2025-08-04
+NYIS,New York Independent System Operator,D,Demand,Arizona,Arizona,405928,megawatthours,New York,2025-08-03
+NYIS,New York Independent System Operator,D,Demand,Arizona,Arizona,388033,megawatthours,New York,2025-08-02
+NYIS,New York Independent System Operator,D,Demand,Arizona,Arizona,413280,megawatthours,New York,2025-08-01
+NYIS,New York Independent System Operator,D,Demand,Arizona,Arizona,515935,megawatthours,New York,2025-07-31
+NYIS,New York Independent System Operator,D,Demand,Arizona,Arizona,601768,megawatthours,New York,2025-07-30
+NYIS,New York Independent System Operator,D,Demand,Arizona,Arizona,613515,megawatthours,New York,2025-07-29
 NYIS,New York Independent System Operator,D,Demand,Arizona,Arizona,582872,megawatthours,New York,2025-07-28
 NYIS,New York Independent System Operator,D,Demand,Arizona,Arizona,501539,megawatthours,New York,2025-07-27
 NYIS,New York Independent System Operator,D,Demand,Arizona,Arizona,496179,megawatthours,New York,2025-07-26
@@ -24,13 +30,13 @@ NYIS,New York Independent System Operator,D,Demand,Arizona,Arizona,572908,megawa
 NYIS,New York Independent System Operator,D,Demand,Arizona,Arizona,566605,megawatthours,New York,2025-07-07
 NYIS,New York Independent System Operator,D,Demand,Arizona,Arizona,506101,megawatthours,New York,2025-07-06
 NYIS,New York Independent System Operator,D,Demand,Arizona,Arizona,445794,megawatthours,New York,2025-07-05
-NYIS,New York Independent System Operator,D,Demand,Arizona,Arizona,411270,megawatthours,New York,2025-07-04
-NYIS,New York Independent System Operator,D,Demand,Arizona,Arizona,488481,megawatthours,New York,2025-07-03
-NYIS,New York Independent System Operator,D,Demand,Arizona,Arizona,509100,megawatthours,New York,2025-07-02
-NYIS,New York Independent System Operator,D,Demand,Arizona,Arizona,550254,megawatthours,New York,2025-07-01
-NYIS,New York Independent System Operator,D,Demand,Arizona,Arizona,536985,megawatthours,New York,2025-06-30
-NYIS,New York Independent System Operator,D,Demand,Arizona,Arizona,479722,megawatthours,New York,2025-06-29
-PJM,"PJM Interconnection, LLC",DF,Day-ahead demand forecast,Eastern,Eastern,3088097,megawatthours,Chicago,2025-07-29
+PJM,"PJM Interconnection, LLC",DF,Day-ahead demand forecast,Eastern,Eastern,2448599,megawatthours,Chicago,2025-08-04
+PJM,"PJM Interconnection, LLC",D,Demand,Arizona,Arizona,2161402,megawatthours,Chicago,2025-08-03
+PJM,"PJM Interconnection, LLC",D,Demand,Arizona,Arizona,2126755,megawatthours,Chicago,2025-08-02
+PJM,"PJM Interconnection, LLC",D,Demand,Arizona,Arizona,2289985,megawatthours,Chicago,2025-08-01
+PJM,"PJM Interconnection, LLC",D,Demand,Arizona,Arizona,2743892,megawatthours,Chicago,2025-07-31
+PJM,"PJM Interconnection, LLC",D,Demand,Arizona,Arizona,3094180,megawatthours,Chicago,2025-07-30
+PJM,"PJM Interconnection, LLC",D,Demand,Arizona,Arizona,3114391,megawatthours,Chicago,2025-07-29
 PJM,"PJM Interconnection, LLC",D,Demand,Arizona,Arizona,3044589,megawatthours,Chicago,2025-07-28
 PJM,"PJM Interconnection, LLC",D,Demand,Arizona,Arizona,2754920,megawatthours,Chicago,2025-07-27
 PJM,"PJM Interconnection, LLC",D,Demand,Arizona,Arizona,2782199,megawatthours,Chicago,2025-07-26
@@ -55,14 +61,14 @@ PJM,"PJM Interconnection, LLC",D,Demand,Arizona,Arizona,2889037,megawatthours,Ch
 PJM,"PJM Interconnection, LLC",D,Demand,Arizona,Arizona,2876563,megawatthours,Chicago,2025-07-07
 PJM,"PJM Interconnection, LLC",D,Demand,Arizona,Arizona,2667278,megawatthours,Chicago,2025-07-06
 PJM,"PJM Interconnection, LLC",D,Demand,Arizona,Arizona,2566129,megawatthours,Chicago,2025-07-05
-PJM,"PJM Interconnection, LLC",D,Demand,Arizona,Arizona,2459314,megawatthours,Chicago,2025-07-04
-PJM,"PJM Interconnection, LLC",D,Demand,Arizona,Arizona,2737478,megawatthours,Chicago,2025-07-03
-PJM,"PJM Interconnection, LLC",D,Demand,Arizona,Arizona,2696571,megawatthours,Chicago,2025-07-02
-PJM,"PJM Interconnection, LLC",D,Demand,Arizona,Arizona,2788097,megawatthours,Chicago,2025-07-01
-PJM,"PJM Interconnection, LLC",D,Demand,Arizona,Arizona,2891947,megawatthours,Chicago,2025-06-30
-PJM,"PJM Interconnection, LLC",D,Demand,Arizona,Arizona,2731608,megawatthours,Chicago,2025-06-29
-ERCO,"Electric Reliability Council of Texas, Inc.",DF,Day-ahead demand forecast,Central,Central,1652401,megawatthours,Houston,2025-07-29
-ERCO,"Electric Reliability Council of Texas, Inc.",D,Demand,Arizona,Arizona,1646742,megawatthours,Houston,2025-07-28
+ERCO,"Electric Reliability Council of Texas, Inc.",DF,Day-ahead demand forecast,Central,Central,1584308,megawatthours,Houston,2025-08-04
+ERCO,"Electric Reliability Council of Texas, Inc.",D,Demand,Arizona,Arizona,1538898,megawatthours,Houston,2025-08-03
+ERCO,"Electric Reliability Council of Texas, Inc.",D,Demand,Arizona,Arizona,1531370,megawatthours,Houston,2025-08-02
+ERCO,"Electric Reliability Council of Texas, Inc.",D,Demand,Arizona,Arizona,1624453,megawatthours,Houston,2025-08-01
+ERCO,"Electric Reliability Council of Texas, Inc.",D,Demand,Arizona,Arizona,1648174,megawatthours,Houston,2025-07-31
+ERCO,"Electric Reliability Council of Texas, Inc.",D,Demand,Arizona,Arizona,1618342,megawatthours,Houston,2025-07-30
+ERCO,"Electric Reliability Council of Texas, Inc.",D,Demand,Arizona,Arizona,1640643,megawatthours,Houston,2025-07-29
+ERCO,"Electric Reliability Council of Texas, Inc.",D,Demand,Arizona,Arizona,1644027,megawatthours,Houston,2025-07-28
 ERCO,"Electric Reliability Council of Texas, Inc.",D,Demand,Arizona,Arizona,1553066,megawatthours,Houston,2025-07-27
 ERCO,"Electric Reliability Council of Texas, Inc.",D,Demand,Arizona,Arizona,1546613,megawatthours,Houston,2025-07-26
 ERCO,"Electric Reliability Council of Texas, Inc.",D,Demand,Arizona,Arizona,1580924,megawatthours,Houston,2025-07-25
@@ -86,13 +92,13 @@ ERCO,"Electric Reliability Council of Texas, Inc.",D,Demand,Arizona,Arizona,1484
 ERCO,"Electric Reliability Council of Texas, Inc.",D,Demand,Arizona,Arizona,1505984,megawatthours,Houston,2025-07-07
 ERCO,"Electric Reliability Council of Texas, Inc.",D,Demand,Arizona,Arizona,1409726,megawatthours,Houston,2025-07-06
 ERCO,"Electric Reliability Council of Texas, Inc.",D,Demand,Arizona,Arizona,1378682,megawatthours,Houston,2025-07-05
-ERCO,"Electric Reliability Council of Texas, Inc.",D,Demand,Arizona,Arizona,1393075,megawatthours,Houston,2025-07-04
-ERCO,"Electric Reliability Council of Texas, Inc.",D,Demand,Arizona,Arizona,1436638,megawatthours,Houston,2025-07-03
-ERCO,"Electric Reliability Council of Texas, Inc.",D,Demand,Arizona,Arizona,1513665,megawatthours,Houston,2025-07-02
-ERCO,"Electric Reliability Council of Texas, Inc.",D,Demand,Arizona,Arizona,1492168,megawatthours,Houston,2025-07-01
-ERCO,"Electric Reliability Council of Texas, Inc.",D,Demand,Arizona,Arizona,1518885,megawatthours,Houston,2025-06-30
-ERCO,"Electric Reliability Council of Texas, Inc.",D,Demand,Arizona,Arizona,1510724,megawatthours,Houston,2025-06-29
-AZPS,Arizona Public Service Company,DF,Day-ahead demand forecast,Arizona,Arizona,141174,megawatthours,Phoenix,2025-07-29
+AZPS,Arizona Public Service Company,DF,Day-ahead demand forecast,Arizona,Arizona,144594,megawatthours,Phoenix,2025-08-04
+AZPS,Arizona Public Service Company,D,Demand,Arizona,Arizona,135847,megawatthours,Phoenix,2025-08-03
+AZPS,Arizona Public Service Company,D,Demand,Arizona,Arizona,144911,megawatthours,Phoenix,2025-08-02
+AZPS,Arizona Public Service Company,D,Demand,Arizona,Arizona,155329,megawatthours,Phoenix,2025-08-01
+AZPS,Arizona Public Service Company,D,Demand,Arizona,Arizona,118990,megawatthours,Phoenix,2025-07-31
+AZPS,Arizona Public Service Company,D,Demand,Arizona,Arizona,154595,megawatthours,Phoenix,2025-07-30
+AZPS,Arizona Public Service Company,D,Demand,Arizona,Arizona,144610,megawatthours,Phoenix,2025-07-29
 AZPS,Arizona Public Service Company,D,Demand,Arizona,Arizona,140140,megawatthours,Phoenix,2025-07-28
 AZPS,Arizona Public Service Company,D,Demand,Arizona,Arizona,126681,megawatthours,Phoenix,2025-07-27
 AZPS,Arizona Public Service Company,D,Demand,Arizona,Arizona,129732,megawatthours,Phoenix,2025-07-26
@@ -117,13 +123,13 @@ AZPS,Arizona Public Service Company,D,Demand,Arizona,Arizona,153892,megawatthour
 AZPS,Arizona Public Service Company,D,Demand,Arizona,Arizona,147015,megawatthours,Phoenix,2025-07-07
 AZPS,Arizona Public Service Company,D,Demand,Arizona,Arizona,136565,megawatthours,Phoenix,2025-07-06
 AZPS,Arizona Public Service Company,D,Demand,Arizona,Arizona,130207,megawatthours,Phoenix,2025-07-05
-AZPS,Arizona Public Service Company,D,Demand,Arizona,Arizona,123912,megawatthours,Phoenix,2025-07-04
-AZPS,Arizona Public Service Company,D,Demand,Arizona,Arizona,126956,megawatthours,Phoenix,2025-07-03
-AZPS,Arizona Public Service Company,D,Demand,Arizona,Arizona,144476,megawatthours,Phoenix,2025-07-02
-AZPS,Arizona Public Service Company,D,Demand,Arizona,Arizona,155783,megawatthours,Phoenix,2025-07-01
-AZPS,Arizona Public Service Company,D,Demand,Arizona,Arizona,153236,megawatthours,Phoenix,2025-06-30
-AZPS,Arizona Public Service Company,D,Demand,Arizona,Arizona,144180,megawatthours,Phoenix,2025-06-29
-SCL,Seattle City Light,DF,Day-ahead demand forecast,Arizona,Arizona,23969,megawatthours,Seattle,2025-07-29
+SCL,Seattle City Light,DF,Day-ahead demand forecast,Arizona,Arizona,22566,megawatthours,Seattle,2025-08-04
+SCL,Seattle City Light,D,Demand,Arizona,Arizona,22014,megawatthours,Seattle,2025-08-03
+SCL,Seattle City Light,D,Demand,Arizona,Arizona,22638,megawatthours,Seattle,2025-08-02
+SCL,Seattle City Light,D,Demand,Arizona,Arizona,24346,megawatthours,Seattle,2025-08-01
+SCL,Seattle City Light,D,Demand,Arizona,Arizona,24518,megawatthours,Seattle,2025-07-31
+SCL,Seattle City Light,D,Demand,Arizona,Arizona,25190,megawatthours,Seattle,2025-07-30
+SCL,Seattle City Light,D,Demand,Arizona,Arizona,24950,megawatthours,Seattle,2025-07-29
 SCL,Seattle City Light,D,Demand,Arizona,Arizona,23791,megawatthours,Seattle,2025-07-28
 SCL,Seattle City Light,D,Demand,Arizona,Arizona,21883,megawatthours,Seattle,2025-07-27
 SCL,Seattle City Light,D,Demand,Arizona,Arizona,21181,megawatthours,Seattle,2025-07-26
@@ -148,9 +154,3 @@ SCL,Seattle City Light,D,Demand,Arizona,Arizona,25706,megawatthours,Seattle,2025
 SCL,Seattle City Light,D,Demand,Arizona,Arizona,25144,megawatthours,Seattle,2025-07-07
 SCL,Seattle City Light,D,Demand,Arizona,Arizona,21980,megawatthours,Seattle,2025-07-06
 SCL,Seattle City Light,D,Demand,Arizona,Arizona,21301,megawatthours,Seattle,2025-07-05
-SCL,Seattle City Light,D,Demand,Arizona,Arizona,20871,megawatthours,Seattle,2025-07-04
-SCL,Seattle City Light,D,Demand,Arizona,Arizona,21534,megawatthours,Seattle,2025-07-03
-SCL,Seattle City Light,D,Demand,Arizona,Arizona,23727,megawatthours,Seattle,2025-07-02
-SCL,Seattle City Light,D,Demand,Arizona,Arizona,25664,megawatthours,Seattle,2025-07-01
-SCL,Seattle City Light,D,Demand,Arizona,Arizona,25683,megawatthours,Seattle,2025-06-30
-SCL,Seattle City Light,D,Demand,Arizona,Arizona,22143,megawatthours,Seattle,2025-06-29

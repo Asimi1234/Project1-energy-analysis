@@ -259,10 +259,10 @@ def combine_weather_backups(start_date, end_date):
         full_df = pd.concat(combined, ignore_index=True)
         backup_path = Path("data/backup/backup_weather.csv")
         full_df.to_csv(backup_path, index=False)
-        logging.info(f"✅ Combined backup_weather.csv saved with {len(full_df)} total rows.")
+        logging.info(f"Combined backup_weather.csv saved with {len(full_df)} total rows.")
         return True
     else:
-        logging.warning("⚠️ No weather data to combine.")
+        logging.warning("No weather data to combine.")
         return False
 
 def combine_energy_backups(start_date, end_date):
@@ -288,10 +288,10 @@ def combine_energy_backups(start_date, end_date):
         full_df = pd.concat(combined, ignore_index=True)
         backup_path = Path("data/backup/backup_energy.csv")
         full_df.to_csv(backup_path, index=False)
-        logging.info(f"✅ Combined backup_energy.csv saved with {len(full_df)} total rows.")
+        logging.info(f"Combined backup_energy.csv saved with {len(full_df)} total rows.")
         return True
     else:
-        logging.warning("⚠️ No energy data to combine.")
+        logging.warning(" No energy data to combine.")
         return False
 
 def main():
@@ -319,12 +319,12 @@ def main():
                 if not weather_df.empty:
                     csv_path = Path(f"data/raw/{city_name}/weather_{city_name}_{start_date}_{end_date}.csv")
                     weather_df.to_csv(csv_path, index=False)
-                    logging.info(f"✅ Saved weather data for {city_name} ({len(weather_df)} rows)")
+                    logging.info(f"Saved weather data for {city_name} ({len(weather_df)} rows)")
                     success_count['weather'] += 1
                 else:
-                    logging.warning(f"❌ No weather data retrieved for {city_name}")
+                    logging.warning(f"No weather data retrieved for {city_name}")
             except Exception as e:
-                logging.error(f"❌ Failed to process weather data for {city_name}: {e}")
+                logging.error(f"Failed to process weather data for {city_name}: {e}")
 
             # Fetch energy data
             try:
@@ -332,12 +332,12 @@ def main():
                 if not energy_df.empty:
                     csv_path = Path(f"data/raw/{city_name}/energy_{city_name}_{start_date}_{end_date}.csv")
                     energy_df.to_csv(csv_path, index=False)
-                    logging.info(f"✅ Saved energy data for {city_name} ({len(energy_df)} rows)")
+                    logging.info(f"Saved energy data for {city_name} ({len(energy_df)} rows)")
                     success_count['energy'] += 1
                 else:
-                    logging.warning(f"❌ No energy data retrieved for {city_name}")
+                    logging.warning(f"No energy data retrieved for {city_name}")
             except Exception as e:
-                logging.error(f"❌ Failed to process energy data for {city_name}: {e}")
+                logging.error(f"Failed to process energy data for {city_name}: {e}")
 
             # Add delay between cities to respect rate limits
             if i < total_cities:
@@ -351,9 +351,9 @@ def main():
         energy_backup_success = combine_energy_backups(start_date, end_date)
         
         if weather_backup_success and energy_backup_success:
-            logging.info("🎉 All data processing completed successfully!")
+            logging.info("All data processing completed successfully!")
         else:
-            logging.warning("⚠️ Some backup files could not be created")
+            logging.warning("Some backup files could not be created")
 
     except Exception as e:
         logging.error(f"Fatal error in main function: {e}")
