@@ -115,7 +115,7 @@ poetry env info --path
 
 3. **Configure environment variables**
 ```bash
-cp .env.example .env
+touch .env
 # Edit .env with your API keys
 ```
 

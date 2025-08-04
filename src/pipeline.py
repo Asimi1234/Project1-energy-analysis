@@ -269,11 +269,11 @@ if generate_quality_report is not None:
             )
             with open(report_path / f"quality_report_weather_{today_str}.json", "w") as f:
                 json.dump(weather_report, f, indent=2)
-            print("✅ Weather quality report saved.")
+            print("Weather quality report saved.")
         except Exception as e:
-            print(f"❌ Failed to generate weather quality report: {e}")
+            print(f"Failed to generate weather quality report: {e}")
     else:
-        print("⚠️ No weather data to check quality.")
+        print("No weather data to check quality.")
 
     # Energy quality report
     if not combined_energy.empty:
@@ -289,10 +289,10 @@ if generate_quality_report is not None:
             )
             with open(report_path / f"quality_report_energy_{today_str}.json", "w") as f:
                 json.dump(energy_report, f, indent=2)
-            print("✅ Energy quality report saved.")
+            print("Energy quality report saved.")
         except Exception as e:
-            print(f"❌ Failed to generate energy quality report: {e}")
+            print(f"Failed to generate energy quality report: {e}")
     else:
-        print("⚠️ No energy data to check quality.")
+        print("No energy data to check quality.")
 else:
-    print("⚠️ Quality report function not available - skipping reports.")
+    print("Quality report function not available - skipping reports.")

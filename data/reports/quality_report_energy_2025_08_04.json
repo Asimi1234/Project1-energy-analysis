@@ -1,6 +1,6 @@
 {
   "dataset_info": {
-    "total_rows": 124,
+    "total_rows": 155,
     "total_columns": 9,
     "columns": [
       "respondent",
@@ -32,7 +32,7 @@
     "latest_date": "2025-08-04T00:00:00+00:00",
     "days_ago": 0,
     "is_fresh": true,
-    "total_records": 124,
-    "valid_dates": 124
+    "total_records": 155,
+    "valid_dates": 155
   }
 }
